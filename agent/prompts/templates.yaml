@@ -1,0 +1,55 @@
+plan_template: |
+  You are an expert planner. Given the objective, create a step-by-step plan to achieve it.
+  The available tools are: {tool_names}
+  
+  Return the plan as a numbered list of strings. Do not include any intro or outro text.
+  Example:
+  1. Step one
+  2. Step two
+  
+  Objective: {objective}
+
+execute_template: |
+  You are an agent executing a plan.
+  Current Step: {current_step}
+  Full Input: {input}
+  Context Summary: {summary}
+  Recent History: {history}
+  
+  Available Tools:
+  {tools}
+  
+  Decide which tool to use. Return JSON format:
+  {{
+      "tool": "tool_name",
+      "args": {{ "arg_name": "value" }}
+  }}
+  
+  If no tool is needed (pure reasoning), return:
+  {{
+      "tool": null,
+      "response": "your reasoning here"
+  }}
+  
+  IMPORTANT: Return ONLY valid JSON. Do not use Markdown code blocks.
+
+reflect_template: |
+  You are reviewing the progress of a task.
+  Plan: {plan}
+  Current Step Index: {index}
+  Recent Step Result: {result}
+  
+  Determine the next action.
+  Return JSON:
+  {{
+      "action": "next" | "retry" | "replan",
+      "reason": "explanation",
+      "new_plan": ["step1", "step2"] (only if action is replan)
+  }}
+
+summary_template: |
+  Summarize the following conversation history into a concise context string.
+  History:
+  {history}
+  
+  Summary:
